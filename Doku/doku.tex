@@ -1,8 +1,8 @@
 \documentclass[a4paper,10pt,ngerman]{scrartcl}
-\usepackage{babel}
+\usepackage[ngerman]{babel}
 
 \usepackage[T1]{fontenc}
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[a4paper,margin=2.5cm]{geometry}
 
 % Die nächsten drei Felder bitte anpassen:
@@ -44,6 +44,11 @@
   showtabs=false, stepnumber=2, tabsize=2, title=\lstname
 }
 
+% Für die Bibliographie
+\usepackage[babel,german=quotes]{csquotes}
+\usepackage[citestyle=authortitle-icomp]{biblatex}
+\addbibresource{literatur.bib}
+
 % Diese beiden Pakete müssen als letztes geladen werden
 \usepackage{hyperref} % Anklickbare Links im Dokument
 \usepackage{cleveref}
@@ -68,5 +73,9 @@
 
 \section{Quellcode (ausschnittsweise)}
 \input{quellcode.tex}
+
+\nocite{*} % Alles REIN
+\printbibliography[heading=bibintoc]%
+
 
 \end{document}
