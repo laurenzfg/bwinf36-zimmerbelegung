@@ -1,0 +1,10 @@
+\subsection{Parsing}
+
+\subsection{Ermittlung der Zusammenhangskomponenten}
+Da für die oben aufgeführte Lösungsidee die genaue Struktur des Graphens von keiner Relevanz ist, ist eine traditionelle Abbildung des Graphens mittels einer Adjazenzliste oder einer Adjazenzmatrix nicht nötig.
+Da nur die Information der Zugehörigkeit zu einer Zusammenhangskomponente relevant ist, bietet sich eine Union-Find-Datenstruktur\autocite[S. 238]{Sedgewick2014} an. Diese ordnet jedem Knoten eine Zusammenhangskomponente zu. Die genauen Kanten werden hingegen nicht gespeichert.
+
+Da eine typische Klasse eine größe von 30 Mädchen nicht überschreitet, habe ich unter den in der Literaturquelle vorgestellten Implementationen "`Quick-Find"'\autocite[S. 245]{Sedgewick2014} für ausreichend effizient befunden.
+
+In meiner Implementation sind alle Knoten (Mädchen) Schlüssel einer Map. Als Wert haben sie eine Person in deren Zimmer sie sind. Der Wert ist hierbei ein Zeiger auf die Mapposition des jeweiligen Mädchens. Wichtig ist hierbei, dass es für jedes Zimmer das gleiche Mädchen als Identifier dient.
+
