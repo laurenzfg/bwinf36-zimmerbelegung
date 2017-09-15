@@ -5,7 +5,7 @@ using std::string;
 
 // Ausgabe der Personendaten zu Debugzwecken
 ostream& Person::debug_out(ostream& os) {
-	os << name_ << "\n"; // Name
+	os << name_ << " --> " << room_ << "\n"; // Name
 
 	// Likes
 	os << "Likes: ";

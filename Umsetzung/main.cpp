@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
 
 #include "person.hpp"
 
@@ -10,18 +11,46 @@ using std::cout;
 using std::cerr;
 using std::string;
 using std::vector;
+using std::map;
 
-vector<Person> parseWishes(std::ifstream& inputFile);
+map<string, Person> parseWishes(std::ifstream& inputFile);
+void markRooms(map<string, Person>& personen);
+bool checkValidity (map<string, Person>& personen);
 
 int main(int argc, char* argv[]) {
-	if (argc == 2) {
+	if (argc >= 2) {
 		// Schritt 1: Parsen der Zimmerwünsche
 		std::ifstream inputFile (argv[1]); // Eingabedatei 1. Parameter
+		// Der zurückgegebene Vektor asoziiert 
+		// jedem Namen auch eine id von 0 bis n-1
 		auto personen = parseWishes(inputFile);
 
-		// TODO Debugoutput entfernen
-		for (auto person : personen)
-			person.debug_out(cout);
+		// Schritt 2: Markieren der Zimmer
+		markRooms(personen);
+		
+		// Schritt 3: Überprüfen der Validität
+		if(checkValidity(personen)) {
+			// Schritt 4: Ausgabe der Zimmerbelegung
+			for (int i = 0; i < personen.size(); ++i) {
+				bool anyOutput = false;
+				for (auto &person : personen) {
+					if (person.second.room_ == i) {
+						cout << person.first << " ";
+						anyOutput = true;
+					}
+				}
+				if (anyOutput)
+					cout << "\n";
+			}
+		} else {
+			cout << "IMPOSSIBLE\n";
+		}
+		
+		if (argc == 3) {
+			for (auto person : personen) {
+				person.second.debug_out(cerr);
+			}
+		}
 	} else {
 		cerr << "Das Programm muss mit dem Dateinamen der Belegungsüwnsche als einzigen Parameter aufgerufen werden.\n";
 	}
@@ -49,9 +78,9 @@ vector<string> extractNames (string input) {
 }
 
 // Liest aus dem BwInf-Eingabeformat einen Vektor von Personen
-vector<Person> parseWishes(std::ifstream& inputFile) {
-	// Anlegen des Vektors für die Personen
-	std::vector<Person> personen;
+map<string, Person> parseWishes(std::ifstream& inputFile) {
+	// Anlegen der Map für die Personen
+	map<string, Person> personen;
 	
 	if (inputFile.is_open()) {
 		// Parsen der Personen bis zum Dateiende
@@ -70,9 +99,53 @@ vector<Person> parseWishes(std::ifstream& inputFile) {
 				extractNames(likes), extractNames(dislikes)};
 
 			// Speichern des Person-Objektes
-			personen.push_back(p);
+			personen.insert(std::make_pair(name, p));
 		}
 	}
 
 	return personen;
+}
+
+void flipAllGirls(map<string, Person>& personen, int from, int to) {
+	for (auto &girl : personen) {
+		if (girl.second.room_ == from) {
+			girl.second.room_ = to;
+		}
+	}
+}
+
+// Berechnet mit Quick-Find alle Zimmer
+void markRooms(map<string, Person>& personen) {
+	// Legt jedes Mädchen in ein 1-Personen-Zimmer
+	int i = 0;
+	for (auto &person : personen) {
+		person.second.room_ = i++;
+	}
+
+	// Erfüllen der Like-Wünsche jedes Mädchens
+	for (auto &person : personen) {
+		int curRoom = person.second.room_;
+		auto likes = person.second.likes_;
+		for (string like : likes) {
+			int otherRoom = personen[like].room_;
+			if (curRoom != otherRoom) {
+				// --> Alle Mädchen im anderen Raum müssen wechseln
+				flipAllGirls(personen, otherRoom, curRoom);
+			}
+		}
+	}
+}
+
+bool checkValidity (map<string, Person>& personen) {
+	for (auto &person : personen) {
+		int curRoom = person.second.room_;
+		auto dislikes = person.second.dislikes_;
+		for (string dislike : dislikes) {
+			int otherRoom = personen[dislike].room_;
+			if (curRoom == otherRoom) {
+				return false;
+			}
+		}
+	}
+	return true;
 }
