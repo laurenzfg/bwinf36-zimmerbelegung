@@ -1,11 +1,11 @@
-#ifndef PERSON_HPP
-#define PERSON_HPP
+#ifndef GIRL_HPP
+#define GIRL_HPP
 
 #include <string>
 #include <vector>
 #include <iostream>
 
-struct Person {
+struct Girl {
 	std::string name_;
 	std::vector<std::string> likes_;
 	std::vector<std::string> dislikes_;
@@ -14,4 +14,4 @@ struct Person {
 	// Ausgabe der Personendaten zu Debugzwecken
 	std::ostream& debug_out(std::ostream& os);
 };
-#endif //PERSON_HPP
+#endif //GIRL_HPP

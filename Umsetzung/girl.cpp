@@ -1,10 +1,10 @@
-#include "person.hpp"
+#include "girl.hpp"
 
 using std::ostream;
 using std::string;
 
 // Ausgabe der Personendaten zu Debugzwecken
-ostream& Person::debug_out(ostream& os) {
+ostream& Girl::debug_out(ostream& os) {
 	os << name_ << " --> " << room_ << "\n"; // Name
 
 	// Likes
