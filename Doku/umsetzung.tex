@@ -1,10 +1,27 @@
 \subsection{Parsing}
+Das auf der Wettbewerbsseite vorgestellte Eingabeformat legt die Repräsentation beider Graphen als Adjazenzliste nahe. Schließlich sind zu jedem Knoten alle verbunden Knoten notiert.
+Daher speichert meine Implementation die beiden Adjazenzlisten als Vektor (Likes und Dislikes), die Zimmernummer und den Namen eines jeden Mädchens in einem C++-Aggregat gemappt auf den Namen des jeweiligen Mädchens.
+So kann zu jedem Namen die beiden Adjazenzlisten und die Zimmernummer effizient abgerufen werden. Der Name wird zu Debugzwecken zusätzlich ebenfalls im Aggregat gespeichert.
 
-\subsection{Ermittlung der Zusammenhangskomponenten}
-Da für die oben aufgeführte Lösungsidee die genaue Struktur des Graphens von keiner Relevanz ist, ist eine traditionelle Abbildung des Graphens mittels einer Adjazenzliste oder einer Adjazenzmatrix nicht nötig.
-Da nur die Information der Zugehörigkeit zu einer Zusammenhangskomponente relevant ist, bietet sich eine Union-Find-Datenstruktur\autocite[S. 238]{Sedgewick2014} an. Diese ordnet jedem Knoten eine Zusammenhangskomponente zu. Die genauen Kanten werden hingegen nicht gespeichert.
+\subsection{Ermittlung der Zusammenhangskomponenten (Listing \ref{lst:quickfind})}
+Da für die oben aufgeführte Lösungsidee die genauen Pfade, aus denen sich das gemeinsame Zimmer ergibt, von keiner Relevanz sind, muss der Graph nicht aufwending in einen ungerichteten Graphen konvertiert werden um anschließend eine Tiefensuche durchzuführen.
+Da nur die Information der Zugehörigkeit zu einer Zusammenhangskomponente relevant ist, bietet sich stattdessen eine Union-Find-Datenstruktur\autocite[S. 238]{Sedgewick2014} an.
+Diese ordnet jedem Knoten eine Zusammenhangskomponente zu. Die genauen Kanten werden hingegen nicht gespeichert.
+Der Vorteil ist jedoch, das jede Kante nur in eine Richtung in den Algorithmus eingegeben werden muss.
 
-Da eine typische Klasse eine größe von 30 Mädchen nicht überschreitet, habe ich unter den in der Literaturquelle vorgestellten Implementationen "`Quick-Find"'\autocite[S. 245]{Sedgewick2014} für ausreichend effizient befunden.
+Da nur einmal die Zusammenhangskomponenten berchnet werden, aber oft Zusammenhangskomponeten verglichen werden, habe ich unter den in der Literaturquelle vorgestellten Implementationen "`Quick-Find"'\autocite[S. 245]{Sedgewick2014} für am effizientesten befunden.
 
-In meiner Implementation sind alle Knoten (Mädchen) Schlüssel einer Map. Als Wert haben sie eine Person in deren Zimmer sie sind. Der Wert ist hierbei ein Zeiger auf die Mapposition des jeweiligen Mädchens. Wichtig ist hierbei, dass es für jedes Zimmer das gleiche Mädchen als Identifier dient.
+Hierfür wird zunächst jedem Mädchen ein Einzelzimmer zugeordnet. Dieses hat eine ID, die fortlaufend-alphabetisch vergeben wird. Diese wird im Aggregat des Mädchens in der Map gespeichert.
 
+Anschließend wird jede Kante des Like-Graphen betrachtet. Dies geschieht durch das Ablaufen aller Like-Adjazenzlisten. Wenn nun die beiden Mädchen einer Kante nicht im gleichen Zimmer sind, sind, müssen alle Mädchen beider betroffenen Zimmer in das gleiche Zimmer wechseln. In welches Zimmer gewechselt wird ist irrelevant, in meiner Implementierung wird in das Zimmer, von dem die Kante ausgeht, gewechselt.
+
+Wichtig ist, dass alle Mädchen das Zimmer wechseln, nicht nur die Mädchen, die direkt mit einer Kante verbunden sind. Schließlich ist, wie in der Lösungsidee aufgeführt, Transitivität gegeben. Durch den Umzug aller Mädchen eines Zimmers wird gewährleistet, dass kein schon berücksichtiger Wunsch verletzt wird.
+
+Nach Betrachtung aller Kanten haben alle Mädchen, die zur Berücksichtigung aller Wünsche in einem Zimmer sein müssen, die gleiche Zimmer-ID.
+
+\subsection{Überprüfung der Gültigkeit der Zimmerbelegung (Listing \ref{lst:validity})}
+Um zu überprüfen, ob ein Mädchen mit einem Mädchen, mit dem es auf keinen Fall platziert werden möchte, platziert wurde, werden alle Dislike-Kanten überprüft. Sollten zwei Mädchen einer Dislike-Kante die gleiche Zimmer-ID haben, ist keine Belegung möglich, bei der sowohl alle Dislikes als auch alle Likes berücksichtig wurden.
+
+\subsection{Ausgabe (Listing \ref{lst:output})}
+Falls dies der Fall ist, wird eine entsprechende Ausgabe getätigt. 
+Ansonsten werden alle Zimmerbelegungen ausgegeben. Dies geschieht, indem für jede mögliche Zimmer-ID, also \(0 .. n-1\), alle Mädchen, die diese ID haben, ausgegeben werden. Viele Zimmer sind aufgrund von Zusammenlegungen leer, diese werden dann entsprechend übersprungen.
