@@ -1,24 +1,32 @@
 \subsection{Abstraktion}
-Die Aufgabenstellung habe ich als Aufgabe aus dem Bereich der Graphentheorie interpretiert.
+Die Aufgabenstellung habe ich als Aufgabe aus dem Bereich der Graphentheorie
+interpretiert.
 
-Im Kontext der Graphentheorie entsprechen Mädchen Knoten. Zimmerbelegungswünsche entsprechen folglich Kanten.
+Im Kontext der Graphentheorie entsprechen Mädchen Knoten.
+Zimmerbelegungswünsche entsprechen folglich Kanten.
+Im entstehenden Graphen zeigt dann beispielweise im ersten Beispiel eine Kante von Anna
+zu Paula, da Anna sich ein Zimmer mit dieser wünscht.
 Nach Einlesen der Belegungswünsche entsteht somit ein gerichteter Graph.
 
-Für die Verwaltung der "`negativen Wünsche"', also den Mädchen, mit denen ein Mädchen auf keinen Fall in einem Zimmer sein möchte, kann ebenso ein gerichteter Graph verwendet werden.
+Die möglichen Konflikte, also die Mädchen, mit denen ein Mädchen auf keinen Fall
+in einem Zimmer sein möchte, können ebenso in einem gerichteter Graphen verwaltet werden.
 Hier entspricht eine Kante dann einer augeschlossenen gemeinsamen Platzierung der beiden Knoten der Kante.
 
 \subsection{Ermittlung der Zimmerbelegung}
-Schwache Zusammenhängigkeitskomponenten im resultierenden ungerichteten Graphen entsprechen der Zimmerbelegung unter Berücksichtigung aller Wünsche. 
-Schwache Zusammenhangskomponenten\autocite[Definiton. Gerichtete Graphen]{WikiZus} entsprechen den Knotenmengen im Graphen, zwischen denen eine Verbindung über einen beliebig langen Pfad bestünde, würde man alle gerichteten Kanten durch entsprechende ungerichtete Kanten ersetzen.
-Diese Abstraktion ist zielführend, da sowohl ein einseitiger als auch ein beidseitiger Zimmerwunsch zur Folge hat, dass beide Mädchen sich ein Zimmer teilen müssen. Daher können die gerichten Kanten wie ungerichtete behandelt werden.
-Außerdem muss Mädchen A, welches sich ein Zimmer mit Mädchen B wünscht, auch in einem Zimmer mit Mädchen C, welches sich ebenfalls ein Zimmer mit Mädchen B wünscht, sein. Der Belegungswünsche wirken sich also im Graphen transitiv aus. Daher kann der Pfad, über den sich die Notwendigkeit eines gemeinsamen Zimmers ergibt, beliebig lang sein.
+\begin{annahme} \label{theo:annahme}
+Schwache Zusammenhängigkeitskomponenten im Belegungswunschgraphen entsprechen den Zimmerbelegungen unter Berücksichtigung aller Wünsche.
+Schwache Zusammenhangskomponenten\autocite[Definiton. Gerichtete Graphen]{WikiZus}
+entsprechen den Teilgraphen des Graphens, in  denen zwischen jedem Knoten eine Verbindung über einen beliebig langen Pfad bestünde,
+ersetzte man alle gerichteten Kanten durch entsprechende ungerichtete.
+\end{annahme}
+
+Diese Annahme ist korrekt, da sowohl ein einseitiger als auch ein beidseitiger Zimmerwunsch zur Folge hat, dass beide Mädchen sich ein Zimmer teilen müssen. Daher können die gerichten Kanten wie ungerichtete Kanten behandelt werden.
+
+Außerdem muss Mädchen A, welches sich ein Zimmer mit Mädchen B wünscht, auch in einem Zimmer mit Mädchen C, welches sich ebenfalls ein Zimmer mit Mädchen B wünscht, sein. Die Belegungswünsche wirken sich also im Graphen \textit{transitiv} aus. Daher kann der Pfad, über den sich die Notwendigkeit eines gemeinsamen Zimmers ergibt, beliebig lang sein.
 
 \subsection{Überprüfung der Validität der Zimmerbelegung}
-Um zu überprüfen, ob bei der Berücksichtigung aller Wünsche Zimmer so belegt wurden, dass keine negativen Wünsche verletzt wurden,
-reicht es, zu überprüfen, ob beide Personen eines negativen Wunsches in der gleichen Zusammenhangskomponente liegen. Wenn dies nicht der Fall ist, befinden sich die Mädchen, zwischen denen ein negativer Wunsch besteht, in verscheidenen Zimmern.
+Um zu überprüfen, ob die nach Annahme \ref{theo:annahme} berechnete Zimmerverteilung im Sinne der Aufgabenstellung gültig ist, reicht es,
+für jede Konfliktkante zu überprüfen, ob beide Knoten der Kante im gleichen Zimmer sind.
+Wenn dies für keine Konfliktkante der Fall ist, befinden sich alle Mädchen, zwischen denen ein Konflikt besteht, in verscheidenen Zimmern.
 
-Wenn dies bei keinem negativen Wunsch der Fall ist, ist die Berücksichtigung aller Wünsche möglich.
-Schließlich sind alle Mädchen, zwischen denen ein negativer Wunsch in beliebige Richtung existiert, in verschiedenen Zimmern untergebracht.
-Dann können schlussendlich alle Zimmer ausgegeben werden. Hierfür müssen einfach nur alle Mädchen innerhalb einer Zusammenhangskomponente ausgegeben werden.
-
-Ansonsten können nicht alle Belegungswünsche erfüllt werden.
+Zur Ausgabe der errechneten Zimmerbelegungen müssen alle Mädchen innerhalb einer Zusammenhangskomponente ausgegeben werden.
