@@ -3,7 +3,7 @@ Das auf der Wettbewerbsseite vorgestellte Eingabeformat legt die Repräsentation
 Daher speichert meine Implementation die beiden Adjazenzlisten als Vektor (Likes und Dislikes), die Zimmernummer und den Namen eines jeden Mädchens in einem C++-Aggregat gemappt auf den Namen des jeweiligen Mädchens.
 So kann zu jedem Namen die beiden Adjazenzlisten und die Zimmernummer effizient abgerufen werden. Der Name wird zu Debugzwecken zusätzlich ebenfalls im Aggregat gespeichert.
 
-\subsection{Ermittlung der Zusammenhangskomponenten (Listing \ref{lst:quickfind})}
+\subsection{Ermittlung der Zusammenhangskomponenten}
 Da für die oben aufgeführte Lösungsidee die genauen Pfade, aus denen sich das gemeinsame Zimmer ergibt, von keiner Relevanz sind, muss der Graph nicht aufwending in einen ungerichteten Graphen konvertiert werden um anschließend eine Tiefensuche durchzuführen.
 Da nur die Information der Zugehörigkeit zu einer Zusammenhangskomponente relevant ist, bietet sich stattdessen eine Union-Find-Datenstruktur\autocite[S. 238]{Sedgewick2014} an.
 Diese ordnet jedem Knoten eine Zusammenhangskomponente zu. Die genauen Kanten werden hingegen nicht gespeichert.
@@ -19,9 +19,9 @@ Wichtig ist, dass alle Mädchen das Zimmer wechseln, nicht nur die Mädchen, die
 
 Nach Betrachtung aller Kanten haben alle Mädchen, die zur Berücksichtigung aller Wünsche in einem Zimmer sein müssen, die gleiche Zimmer-ID.
 
-\subsection{Überprüfung der Gültigkeit der Zimmerbelegung (Listing \ref{lst:validity})}
+\subsection{Überprüfung der Gültigkeit der Zimmerbelegung}
 Um zu überprüfen, ob ein Mädchen mit einem Mädchen, mit dem es auf keinen Fall platziert werden möchte, platziert wurde, werden alle Dislike-Kanten überprüft. Sollten zwei Mädchen einer Dislike-Kante die gleiche Zimmer-ID haben, ist keine Belegung möglich, bei der sowohl alle Dislikes als auch alle Likes berücksichtig wurden.
 
-\subsection{Ausgabe (Listing \ref{lst:output})}
+\subsection{Ausgabe}
 Falls dies der Fall ist, wird eine entsprechende Ausgabe getätigt. 
 Ansonsten werden alle Zimmerbelegungen ausgegeben. Dies geschieht, indem für jede mögliche Zimmer-ID, also \(0 .. n-1\), alle Mädchen, die diese ID haben, ausgegeben werden. Viele Zimmer sind aufgrund von Zusammenlegungen leer, diese werden dann entsprechend übersprungen.
