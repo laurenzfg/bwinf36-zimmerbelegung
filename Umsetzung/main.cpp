@@ -68,8 +68,8 @@ int main(int argc, char* argv[]) {
 			}
 		}
 	} else {
-		cerr << "Das Programm muss mit dem Dateinamen der Belegungswünsche \
-                         als einzigen Parameter aufgerufen werden.\n";
+		cerr << "Das Programm muss mit dem Dateinamen der Belegungswünsche als einzigen Parameter \
+aufgerufen werden.\n";
 	}
 }
 
