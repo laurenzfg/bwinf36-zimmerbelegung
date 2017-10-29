@@ -1,27 +1,82 @@
-\subsection{Parsing}
-Das auf der Wettbewerbsseite vorgestellte Eingabeformat legt die Repräsentation beider Graphen als Adjazenzliste nahe. Schließlich sind zu jedem Knoten alle verbunden Knoten notiert.
-Daher speichert meine Implementation die beiden Adjazenzlisten als Vektor (Likes und Dislikes), die Zimmernummer und den Namen eines jeden Mädchens in einem C++-Aggregat gemappt auf den Namen des jeweiligen Mädchens.
-So kann zu jedem Namen die beiden Adjazenzlisten und die Zimmernummer effizient abgerufen werden. Der Name wird zu Debugzwecken zusätzlich ebenfalls im Aggregat gespeichert.
+\subsection{Parsing und Datenstrukturen}
+Das auf der Wettbewerbsseite vorgestellte Eingabeformat legt die Repräsentation
+beider Graphen mithilfe von Adjazenzlisten nahe.
+Schließlich sind in der Eingabedatei zu jedem Knoten alle verbundenen Knoten notiert.
+
+Adjazenzlisten sind eine von drei Möglichkeiten, einen Graphen zu speichern. Hierbei wird 
+für jeden Knoten in einer Liste notiert, zu welchen Knoten eine Verbindung (=Kante)
+besteht.
+
+Meine Implementation speichert die beiden Adjazenzlisten (Wünsche sowie Konflikte)
+als Vektor, die Zimmernummer und den Namen eines jeden Mädchens gebündelt in einem
+Aggregat\footnote{In der Programmiersprache C++ ist ein Aggregat eine Möglichkeit der
+Sprache, verschiedene Variablen in einem Objekt zu bündeln. Vorteil ist, dass der
+Konstruktor implizit und der Zugriff auf die Felder denkbar einfach ist.}.
+Alle Aggregate werden in einer Map gespeichert, bei der der Name des Mädchens den 
+Schlüssel bildet.
 
 \subsection{Ermittlung der Zusammenhangskomponenten}
-Da für die oben aufgeführte Lösungsidee die genauen Pfade, aus denen sich das gemeinsame Zimmer ergibt, von keiner Relevanz sind, muss der Graph nicht aufwending in einen ungerichteten Graphen konvertiert werden um anschließend eine Tiefensuche durchzuführen.
-Da nur die Information der Zugehörigkeit zu einer Zusammenhangskomponente relevant ist, bietet sich stattdessen eine Union-Find-Datenstruktur\autocite[S. 238]{Sedgewick2014} an.
-Diese ordnet jedem Knoten eine Zusammenhangskomponente zu. Die genauen Kanten werden hingegen nicht gespeichert.
-Der Vorteil ist jedoch, das jede Kante nur in eine Richtung in den Algorithmus eingegeben werden muss.
+Zur Ermittlung der Zimmer nach Annahme \ref{theo:annahme} müssen die schwachen
+Zusammenhangskomponenten des Graphens ermittelt werden. 
+Da nur die Information der Zugehörigkeit zu einer Zusammenhangskomponente relevant ist,
+bietet sich eine Union-Find-Datenstruktur\autocite[S. 238]{Sedgewick2014} an.
+Diese ordnet nach einmaliger Berechnung jedem Knoten eine
+Zusammenhangskomponente (=Zimmer) zu.
 
-Da nur einmal die Zusammenhangskomponenten berchnet werden, aber oft Zusammenhangskomponeten verglichen werden, habe ich unter den in der Literaturquelle vorgestellten Implementationen "`Quick-Find"'\autocite[S. 245]{Sedgewick2014} für am effizientesten befunden.
+In einer Union-Find-Datenstruktur werden nach und nach alle Kanten eingegeben
+(Operation \textit{union}). Dabei werden die Zusammenhangskomponenten ermittelt, die
+mit der Operation \textit{find} abgerufen werden können.
 
-Hierfür wird zunächst jedem Mädchen ein Einzelzimmer zugeordnet. Dieses hat eine ID, die fortlaufend-alphabetisch vergeben wird. Diese wird im Aggregat des Mädchens in der Map gespeichert.
+Da nur einmal die Zusammenhangskomponenten berchnet werden, aber im folgenden
+Programmablauf oft Zusammenhangskomponeten verglichen werden, 
+ist meine Implementation an die in der Literaturquelle vorgestellte Implementation 
+"`Quick-Find"'\autocite[S. 245]{Sedgewick2014} angelehnt.
+Ein weiter Vorteil dieser Strategie ist, dass der Graph zumindest bei meiner
+im folgenden skizzierten Implementation nicht erst in einen ungerichteten Graphen
+umgeformt werden muss.
+Es reicht, eine Kante in eine Richtung einmal einzugeben.
 
-Anschließend wird jede Kante des Like-Graphen betrachtet. Dies geschieht durch das Ablaufen aller Like-Adjazenzlisten. Wenn nun die beiden Mädchen einer Kante nicht im gleichen Zimmer sind, sind, müssen alle Mädchen beider betroffenen Zimmer in das gleiche Zimmer wechseln. In welches Zimmer gewechselt wird ist irrelevant, in meiner Implementierung wird in das Zimmer, von dem die Kante ausgeht, gewechselt.
+Zunächst wird jedem Mädchen eine fortlaufende Zimmer-ID zugeordnet.
+Im Sinne der Aufgabenstellung wird also jedem Mädchen ein Einzelzimmer zugeordnet.
+Danach können die Belegungswünsche beachtet werden.
 
-Wichtig ist, dass alle Mädchen das Zimmer wechseln, nicht nur die Mädchen, die direkt mit einer Kante verbunden sind. Schließlich ist, wie in der Lösungsidee aufgeführt, Transitivität gegeben. Durch den Umzug aller Mädchen eines Zimmers wird gewährleistet, dass kein schon berücksichtiger Wunsch verletzt wird.
+Dafür wird bei jedem Mädchen über alle Belegungswünsche iteriert.
+Wenn nun die beiden Mädchen eines Belegungswunsches (=Kante im Wunschgraphen)
+nicht im gleichen Zimmer sind, müssen alle Mädchen beider betroffenen Zimmer in das
+gleiche Zimmer wechseln.
+In welches Zimmer gewechselt wird ist irrelevant, in meiner Implementierung wird in das
+Zimmer, von dem die Kante ausgeht, gewechselt.
+Der Wechselvorgang ist so implementiert, dass die Zimmer-ID aller Mädchen in dem einem
+Zimmer auf die ID des anderen Zimmers gesetzt wird. So werden beide Zimmer
+zusammengeschlossen. Dies entspricht der \textit{union}-Operation.
 
-Nach Betrachtung aller Kanten haben alle Mädchen, die zur Berücksichtigung aller Wünsche in einem Zimmer sein müssen, die gleiche Zimmer-ID.
+Wichtig ist, dass alle Mädchen das Zimmer wechseln. Nicht nur die Mädchen,
+die direkt mit einer Kante verbunden sind.
+Schließlich ist, wie in der Lösungsidee aufgeführt, Transitivität gegeben.
+Durch den Umzug aller Mädchen eines Zimmers wird gewährleistet,
+dass kein schon berücksichtiger Wunsch verletzt wird.
+
+Nach Betrachtung aller Kanten haben alle Mädchen,
+die zur Berücksichtigung aller Wünsche in einem Zimmer sein müssen,
+die gleiche Zimmer-ID.
+
+Die \textit{find}-Operation entspricht also einfach dem Auslesen der Zimmernummer aus dem Aggregat des jeweiligen Mädchens.
 
 \subsection{Überprüfung der Gültigkeit der Zimmerbelegung}
-Um zu überprüfen, ob ein Mädchen mit einem Mädchen, mit dem es auf keinen Fall platziert werden möchte, platziert wurde, werden alle Dislike-Kanten überprüft. Sollten zwei Mädchen einer Dislike-Kante die gleiche Zimmer-ID haben, ist keine Belegung möglich, bei der sowohl alle Dislikes als auch alle Likes berücksichtig wurden.
+Um zu überprüfen, ob zwei Mädchen, zwischen denen ein Konflikt besteht,
+in einem geimeinsamen Zimmer sind,
+wird wiederum über alle Konfliktkanten eines jeden Mädchens iteriert.
+Sollten zwei Mädchen einer Konflikt-Kante die gleiche Zimmer-ID haben, ist keine Belegung möglich, bei der sowohl alle Wünsche als auch alle Konflikte berücksichtig werden.
+Schließlich befinden sich zwei Mädchen, zwischen denen ein Konflikt besteht, im gleichen
+Zimmer.
+
+Sollten alle Mädchen, zwischen denen ein Konflikt besteht, in jeweils verschiedenen Zimmern untergebracht sein, ist ein gültige Zimmerbelegung möglich.
 
 \subsection{Ausgabe}
-Falls dies der Fall ist, wird eine entsprechende Ausgabe getätigt. 
-Ansonsten werden alle Zimmerbelegungen ausgegeben. Dies geschieht, indem für jede mögliche Zimmer-ID, also \(0 .. n-1\), alle Mädchen, die diese ID haben, ausgegeben werden. Viele Zimmer sind aufgrund von Zusammenlegungen leer, diese werden dann entsprechend übersprungen.
+Dann werden alle Zimmerbelegungen ausgegeben.
+Dies geschieht, indem für jede mögliche Zimmer-ID, also \(0 .. n-1\),
+alle Mädchen, die diese ID haben, ausgegeben werden.
+Viele Zimmer sind aufgrund der Zusammenlegungen leer,
+diese werden dann entsprechend übersprungen.
+
+Falls keine gültige Zimmerbelegung möglich ist, erfolgt die Ausgabe "`Impossible"'.
