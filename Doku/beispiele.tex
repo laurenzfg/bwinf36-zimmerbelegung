@@ -1,8 +1,9 @@
-Falls Sie eigene Beispiele testen möchten, rufen Sie das Programm bitte folgendermaßen auf:
+Falls Sie eigene Beispiele testen möchten,
+rufen Sie das Programm bitte folgendermaßen auf:
 
 \shellcmd{./zimmerbelegung.x dateiname}
 
-Getestet habe ich meinen Quellcode unter der gcc Version 7.1.1-3 auf einem 64bit-Fedora.
+Getestet habe ich meinen Quellcode unter gcc 7.1.1-3 auf einem 64bit-Fedora.
 Mit folgendem Kommando können Sie mein Programm selbst kompilieren:
 
 \shellcmd{g++ -O -o zimmerbelegung.x main.cpp girl.cpp}
@@ -16,4 +17,19 @@ Hier finden Sie die Ausgaben zu allen Beispielen der BwInf-Website:
 \lstinputlisting[breaklines=true]{../Beispiele/Ausgaben/z5.txt}
 \lstinputlisting[breaklines=true]{../Beispiele/Ausgaben/z6.txt}
 
-Eigene Beispiele habe ich nicht erstellt. (TODO)
+Zur weiteren Überprüfung meines Programmes habe ich einige weitere Testfälle konstruiert.
+
+In \texttt{keineWuensche.txt} ist allen die Zimmerbelegung völlig egal,
+sie haben weder Wünsche noch Konflikte.
+Folglich werden alle in Einzelzimmern platziert.
+\lstinputlisting[breaklines=true]{../Beispiele/Ausgaben/keineWuensche.txt}
+
+In \texttt{everybodysDarling.txt} möchten alle mit "`Luisa"' wohnen,
+diese hat weder Wünsche noch Konflikte.
+Folglich werden alle in einem gemeinsamen Zimmer platziert.
+\lstinputlisting[breaklines=true]{../Beispiele/Ausgaben/everybodysDarling.txt}
+
+In \texttt{hassliebe.txt} existiert ein Widerspruch, "`Luca"' gibt "`Julius"'
+gleichzeitig als Wunsch als auch als Konflikt an.
+Folglich wird "`Impossible"' ausgegeben.
+\lstinputlisting[breaklines=true]{../Beispiele/Ausgaben/hassliebe.txt}
