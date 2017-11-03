@@ -8,25 +8,43 @@ Im entstehenden Graphen zeigt dann beispielweise im ersten Beispiel eine Kante v
 zu Paula, da Anna sich ein Zimmer mit dieser wünscht.
 Nach Einlesen der Belegungswünsche entsteht somit ein gerichteter Graph.
 
+Ein Graph ist vereinfacht eine Zeichnung, in der alle Mädchen aufgeführt sind.
+Zimmerbelegungswünsche sind in dieser Zeichnung durch Pfeile von dem wünschendem
+Mädchen zu dem gewünschten Mädchen dargestellt.
+
 Die möglichen Konflikte, also die Mädchen, mit denen ein Mädchen auf keinen Fall
-in einem Zimmer sein möchte, können ebenso in einem gerichteter Graphen verwaltet werden.
-Hier entspricht eine Kante dann einer augeschlossenen gemeinsamen Platzierung der beiden Knoten der Kante.
+in einem Zimmer sein möchte, können ebenso in einem gerichteten Graphen verwaltet werden.
+Hier entspricht eine Kante dann einer ausgeschlossenen gemeinsamen Platzierung
+der beiden Mädchen, die die Kante verbindet.
 
 \subsection{Ermittlung der Zimmerbelegung}
 \begin{annahme} \label{theo:annahme}
-Schwache Zusammenhängigkeitskomponenten im Belegungswunschgraphen entsprechen den Zimmerbelegungen unter Berücksichtigung aller Wünsche.
+Schwache Zusammenhängigkeitskomponenten im Belegungswunschgraphen entsprechen den
+Zimmerbelegungen unter Berücksichtigung aller Wünsche.
 Schwache Zusammenhangskomponenten\autocite[Definiton. Gerichtete Graphen]{WikiZus}
-entsprechen den Teilgraphen des Graphens, in  denen zwischen jedem Knoten eine Verbindung über einen beliebig langen Pfad bestünde,
+entsprechen den Teilgraphen des Graphens, in denen zwischen jedem Knoten eine
+Verbindung über einen beliebig langen Pfad bestünde,
 ersetzte man alle gerichteten Kanten durch entsprechende ungerichtete.
 \end{annahme}
 
-Diese Annahme ist korrekt, da sowohl ein einseitiger als auch ein beidseitiger Zimmerwunsch zur Folge hat, dass beide Mädchen sich ein Zimmer teilen müssen. Daher können die gerichten Kanten wie ungerichtete Kanten behandelt werden.
+Diese Annahme ist korrekt, da sowohl ein einseitiger als auch ein beidseitiger
+Zimmerwunsch zur Folge hat, dass beide Mädchen sich ein Zimmer teilen müssen.
+Daher können die gerichten Kanten wie ungerichtete Kanten behandelt werden.
+Aus den Pfeilen der Zeichnung werden also Linien.
 
-Außerdem muss Mädchen A, welches sich ein Zimmer mit Mädchen B wünscht, auch in einem Zimmer mit Mädchen C, welches sich ebenfalls ein Zimmer mit Mädchen B wünscht, sein. Die Belegungswünsche wirken sich also im Graphen \textit{transitiv} aus. Daher kann der Pfad, über den sich die Notwendigkeit eines gemeinsamen Zimmers ergibt, beliebig lang sein.
+Außerdem muss Mädchen A, welches sich ein Zimmer mit Mädchen B wünscht,
+auch in einem Zimmer mit Mädchen C,
+welches sich ebenfalls ein Zimmer mit Mädchen B wünscht, sein.
+Die Belegungswünsche wirken sich also im Graphen \textit{transitiv} aus.
+Daher kann der Pfad, über den sich die Notwendigkeit eines gemeinsamen Zimmers ergibt,
+beliebig lang sein.
 
 \subsection{Überprüfung der Validität der Zimmerbelegung}
-Um zu überprüfen, ob die nach Annahme \ref{theo:annahme} berechnete Zimmerverteilung im Sinne der Aufgabenstellung gültig ist, reicht es,
+Um zu überprüfen, ob die nach Annahme \ref{theo:annahme} berechnete Zimmerverteilung
+im Sinne der Aufgabenstellung gültig ist, reicht es,
 für jede Konfliktkante zu überprüfen, ob beide Knoten der Kante im gleichen Zimmer sind.
-Wenn dies für keine Konfliktkante der Fall ist, befinden sich alle Mädchen, zwischen denen ein Konflikt besteht, in verscheidenen Zimmern.
+Wenn dies für keine Konfliktkante der Fall ist, befinden sich alle Mädchen,
+zwischen denen ein Konflikt besteht, in verschiedenen Zimmern.
 
-Zur Ausgabe der errechneten Zimmerbelegungen müssen alle Mädchen innerhalb einer Zusammenhangskomponente ausgegeben werden.
+Zur Ausgabe der errechneten Zimmerbelegungen müssen alle Mädchen innerhalb einer
+Zusammenhangskomponente ausgegeben werden.
