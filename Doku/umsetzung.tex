@@ -15,6 +15,9 @@ Konstruktor implizit und der Zugriff auf die Felder denkbar einfach ist.}.
 Alle Aggregate werden in einer Map gespeichert, bei der der Name des Mädchens den 
 Schlüssel bildet.
 
+So können alle Daten zu einem Mädchen schnell abgerufen werden.
+Die Zimmernummer wird zunächst leer initialisiert.
+
 \subsection{Ermittlung der Zusammenhangskomponenten}
 Zur Ermittlung der Zimmer nach Annahme \ref{theo:annahme} müssen die schwachen
 Zusammenhangskomponenten des Graphens ermittelt werden. 
@@ -37,15 +40,15 @@ umgeformt werden muss.
 Es reicht, eine Kante in eine Richtung einmal einzugeben.
 
 Zunächst wird jedem Mädchen eine fortlaufende Zimmer-ID zugeordnet.
-Im Sinne der Aufgabenstellung wird also jedem Mädchen ein Einzelzimmer zugeordnet.
+Im Kontext der Aufgabenstellung wird also jedem Mädchen ein Einzelzimmer zugeordnet.
 Danach können die Belegungswünsche beachtet werden.
 
 Dafür wird bei jedem Mädchen über alle Belegungswünsche iteriert.
 Wenn nun die beiden Mädchen eines Belegungswunsches (=Kante im Wunschgraphen)
 nicht im gleichen Zimmer sind, müssen alle Mädchen beider betroffenen Zimmer in das
 gleiche Zimmer wechseln.
-In welches Zimmer gewechselt wird ist irrelevant, in meiner Implementierung wird in das
-Zimmer, von dem die Kante ausgeht, gewechselt.
+In welches Zimmer gewechselt wird ist irrelevant.
+In meiner Implementierung wird in das Zimmer, von dem die Kante ausgeht, gewechselt.
 Der Wechselvorgang ist so implementiert, dass die Zimmer-ID aller Mädchen in dem einem
 Zimmer auf die ID des anderen Zimmers gesetzt wird. So werden beide Zimmer
 zusammengeschlossen. Dies entspricht der \textit{union}-Operation.
@@ -60,17 +63,19 @@ Nach Betrachtung aller Kanten haben alle Mädchen,
 die zur Berücksichtigung aller Wünsche in einem Zimmer sein müssen,
 die gleiche Zimmer-ID.
 
-Die \textit{find}-Operation entspricht also einfach dem Auslesen der Zimmernummer aus dem Aggregat des jeweiligen Mädchens.
+Die \textit{find}-Operation entspricht also dem Auslesen der Zimmernummer aus dem Aggregat des jeweiligen Mädchens.
 
 \subsection{Überprüfung der Gültigkeit der Zimmerbelegung}
 Um zu überprüfen, ob zwei Mädchen, zwischen denen ein Konflikt besteht,
 in einem geimeinsamen Zimmer sind,
 wird wiederum über alle Konfliktkanten eines jeden Mädchens iteriert.
-Sollten zwei Mädchen einer Konflikt-Kante die gleiche Zimmer-ID haben, ist keine Belegung möglich, bei der sowohl alle Wünsche als auch alle Konflikte berücksichtig werden.
+Sollten zwei Mädchen einer Konfliktkante die gleiche Zimmer-ID haben, ist keine Belegung möglich, bei der sowohl alle Wünsche als auch alle Konflikte berücksichtig werden.
 Schließlich befinden sich zwei Mädchen, zwischen denen ein Konflikt besteht, im gleichen
 Zimmer.
 
-Sollten alle Mädchen, zwischen denen ein Konflikt besteht, in jeweils verschiedenen Zimmern untergebracht sein, ist ein gültige Zimmerbelegung möglich.
+Sollten alle Mädchen, zwischen denen ein Konflikt besteht,
+in jeweils verschiedenen Zimmern untergebracht sein,
+ist eine gültige Zimmerbelegung möglich.
 
 \subsection{Ausgabe}
 Dann werden alle Zimmerbelegungen ausgegeben.
